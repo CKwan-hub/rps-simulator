@@ -12,7 +12,7 @@ function App() {
 
   const initializeIcons = () => {
     const numIcons = 10; // Number of icons for each type
-    const iconSize = 50; // Icon size
+    const iconSize = 25; // Updated icon size to 25
     const gridWidth = 90 * window.innerWidth / 100; // Calculate grid width based on 90vw
     const gridHeight = 90 * window.innerHeight / 100; // Calculate grid height based on 90vh
   
@@ -38,8 +38,8 @@ function App() {
     createIcons('rock', (gridWidth - iconSize) / 2, 10); // Top middle
   
     // Adjusted position for paper icons
-    const paperStartX = gridWidth - (numIcons % 5) * (iconSize + 10) - 120;
-    const paperStartY = gridHeight - (Math.ceil(numIcons / 5) - 1) * (iconSize + 10);
+    const paperStartX = gridWidth - (numIcons % 5) * (iconSize + 10) - (numIcons > 5 ? 10 : 0) - iconSize;
+    const paperStartY = gridHeight - (Math.ceil(numIcons / 5) - 1) * (iconSize + 10) - iconSize - 10;
     createIcons('paper', paperStartX, paperStartY); // Bottom right
   
     createIcons('scissors', 10, gridHeight - iconSize - 10); // Bottom left
@@ -55,8 +55,9 @@ function App() {
   };
 
   const moveIcons = () => {
-    const gridWidth = window.innerWidth; // Use full viewport width
-    const gridHeight = window.innerHeight; // Use full viewport height
+    const gridWidth = 90 * window.innerWidth / 100; // Calculate grid width based on 90vw
+    const gridHeight = 90 * window.innerHeight / 100; // Calculate grid height based on 90vh
+    const iconSize = 25; // Updated icon size to 25
     const speed = 2; // Adjust speed as needed
   
     setIcons(icons =>
@@ -69,7 +70,7 @@ function App() {
         dy += getRandomDirection() * 0.1;
   
         // Calculate the magnitude of the current velocity
-        let currentSpeed = Math.sqrt(dx * dx + dy * dy);
+        const currentSpeed = Math.sqrt(dx * dx + dy * dy);
   
         // If speed is zero, set a random direction
         if (currentSpeed === 0) {
@@ -89,24 +90,67 @@ function App() {
         if (x <= 0) {
           x = 0;
           dx *= -1;
-        } else if (x >= gridWidth - 10) {
-          x = gridWidth - 10;
+        } else if (x >= gridWidth - iconSize) {
+          x = gridWidth - iconSize;
           dx *= -1;
         }
   
         if (y <= 0) {
           y = 0;
           dy *= -1;
-        } else if (y >= gridHeight - 10) {
-          y = gridHeight - 10;
+        } else if (y >= gridHeight - iconSize) {
+          y = gridHeight - iconSize;
           dy *= -1;
         }
+  
+        // Check collision with other icons
+        icons.forEach(otherIcon => {
+          if (otherIcon.id !== icon.id) {
+            const distance = Math.sqrt((x - otherIcon.position.x) ** 2 + (y - otherIcon.position.y) ** 2);
+            if (distance < iconSize) {
+              // Collision detected
+              if (icon.type !== otherIcon.type) {
+                // Different types, determine winner
+                const winner = determineWinner(icon.type, otherIcon.type);
+                if (winner === icon.type) {
+                  // Icon wins, other icon becomes the winner's type
+                  otherIcon.type = icon.type;
+                } else if (winner === otherIcon.type) {
+                  // Other icon wins, current icon becomes the winner's type
+                  icon.type = otherIcon.type;
+                }
+  
+                // Bounce off each other
+                const tempDx = dx;
+                const tempDy = dy;
+                dx = otherIcon.direction.x;
+                dy = otherIcon.direction.y;
+                otherIcon.direction.x = tempDx;
+                otherIcon.direction.y = tempDy;
+              }
+            }
+          }
+        });
   
         // Update position and direction
         return { ...icon, position: { x, y }, direction: { x: dx, y: dy } };
       })
     );
-  };  
+  };
+  
+
+  // Function to determine the winner based on rock-paper-scissors rules
+const determineWinner = (type1, type2) => {
+  if (type1 === type2) {
+    return null; // It's a tie
+  }
+  if ((type1 === 'rock' && type2 === 'scissors') ||
+      (type1 === 'scissors' && type2 === 'paper') ||
+      (type1 === 'paper' && type2 === 'rock')) {
+    return type1;
+  }
+  return type2;
+};
     
   // Use useEffect to run initializeIcons and moveIcons
   useEffect(() => {
