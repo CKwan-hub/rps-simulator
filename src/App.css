@@ -1,0 +1,47 @@
+body {
+  overflow-y: hidden; 
+  overflow-x: hidden; 
+  }
+
+.App {
+  max-height: 100vh;
+  max-width: 100vw;
+  overflow: hidden !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.grid {
+  /* position: relative; */
+  max-width: 100%; /* Full width */
+  max-height: 100%; /* Full height */
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+
+.icon {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: #f0f0f0;
+  border: 1px solid #999;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.1s ease-in-out;
+}
+
+.rock {
+  background-color: #56f43686;
+}
+
+.paper {
+  background-color: #f321217b;
+}
+
+.scissors {
+  background-color: #4c8eaf77;
+}
