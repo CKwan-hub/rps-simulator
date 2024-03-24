@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGem, faNoteSticky, faScissors } from '@fortawesome/free-solid-svg-icons';
+import { faHandRock, faHandPaper, faHandScissors } from '@fortawesome/free-solid-svg-icons';
 
 const Grid = ({ icons }) => {
   return (
@@ -21,11 +21,11 @@ const Grid = ({ icons }) => {
 const getIconComponent = type => {
   switch (type) {
     case 'rock':
-      return <FontAwesomeIcon icon={faGem} />;
+      return <FontAwesomeIcon icon={faHandRock} />;
     case 'paper':
-      return <FontAwesomeIcon icon={faNoteSticky} />;
+      return <FontAwesomeIcon icon={faHandPaper} />;
     case 'scissors':
-      return <FontAwesomeIcon icon={faScissors} />;
+      return <FontAwesomeIcon icon={faHandScissors} />;
     default:
       return null;
   }
