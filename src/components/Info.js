@@ -1,21 +1,13 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPause, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faUndo, faStop, faU } from '@fortawesome/free-solid-svg-icons';
 
-const InfoBar = ({ showInfoBar, paused, togglePause, stopSimulation }) => {
-  const handlePauseClick = () => {
-    togglePause();
-  };
-
-  const handleStopClick = () => {
-    stopSimulation();
-  };
-
+const InfoBar = ({ showInfoBar, resetSimulation, stopSimulation }) => {
   return (
     <div className={`info-bar ${showInfoBar ? 'show' : 'hide'}`}>
       <div className="left">
-        <FontAwesomeIcon icon={faPause} onClick={handlePauseClick} />
-        <FontAwesomeIcon icon={faStop} onClick={handleStopClick} />
+        <FontAwesomeIcon icon={faUndo} onClick={resetSimulation} />
+        <FontAwesomeIcon icon={faStop} onClick={stopSimulation} />
       </div>
       <div className="right">
         {/* Placeholder for analytics */}
